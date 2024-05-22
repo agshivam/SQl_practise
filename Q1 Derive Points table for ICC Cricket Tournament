@@ -1,0 +1,25 @@
+/*create table icc_world_cup ( 
+  team_1 varchar(30),
+  team_2 varchar(30),
+  winner varchar(30)
+  );
+  
+
+INSERT INTO icc_world_cup values('India','SL','India');
+INSERT INTO icc_world_cup values('SL','Aus','Aus');
+INSERT INTO icc_world_cup values('SA','Eng','Eng');
+INSERT INTO icc_world_cup values('Eng','NZ','NZ');
+INSERT INTO icc_world_cup values('Aus','India','India');
+*/
+--select * from icc_world_cup;
+
+----------solution:
+with teams_status as (
+  select team_1 , case when team_1 = winner then 1 else 0 end as win_cnt from Icc_world_cup
+  union all
+   select team_2, case when team_2 = winner then 1 else 0 end as win_cnt from Icc_world_cup
+  ),
+  team_counts as (
+    select team_1, count(*) as total_matches_played, sum(win_cnt) as total_match_win, count(*) - sum(win_cnt) as total_matches_loss from teams_status
+group by team_1 order by total_match_win)
+select * from team_counts;
